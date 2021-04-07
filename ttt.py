@@ -1,61 +1,51 @@
-#consts to stand in for X and O (so I don't have to use chars or strings)
-from consts import X, O, EMPTY, DRAW
+from consts import X, O, EMPTY, DRAW    #consts to keep X, O, EMPTY, and DRAW the same across all files
 class ttt():
     def __init__(self):
-        self.board = [EMPTY]*9  #inits the board with 9 positions marked as empty
-        self.win = EMPTY        #inits win as being EMPTY as X or O hasn't won and no draw
-
-    def getPos(self, pos):  #gets the value at the specified position
+        self.board = [EMPTY]*9
+        self.winStatus = EMPTY
+#---------------Accessor methods---------------#
+    #gets the win status of the game
+    def getWinStatus(self):
+        self.updateWinStatus()  #again, probably shouldn't put this here
+        return self.winStatus
+    #gets the mark at position 'pos'
+    def getMarkAtPos(self, pos):
         return self.board[pos]
-
-    def setPos(self, pos, mark):        #sets the mark at that position
-        if (mark != X or mark != O) and self.board[pos] != EMPTY:
-            print("Illegal mark entry") #error if not X, O, or if pos is not empty
-        else:
-            self.board[pos] = mark
-            self.checkWin()
-        
-    def getWin(self):       #returns the win status of the board
-        return self.win
-    
-    def print(self):
-        pb = []                 #'printable board'
-        for p in self.board:    #convert board values (ints) to strings
-            if p == X:
-                pb.append("X")
-            elif p == O:
-                pb.append("O")
-            else:
-                pb.append(" ")
-        print(pb[0] + "|" + pb[1] + "|" + pb[2])
-        print("-+-+-")
-        print(pb[3] + "|" + pb[4] + "|" + pb[5])
-        print("-+-+-")
-        print(pb[6] + "|" + pb[7] + "|" + pb[8])
-
-    def checkWin(self):     #checks to see if the board has been won
-        if EMPTY not in self.board:
-            self.win = DRAW
+#---------------Mutator methods----------------#
+    #changes the value on the board at position 'pos' to value 'mark'
+    def makeMove(self, mark, pos):
+        self.board[pos] = mark
+    #updates the winStatus variable
+    def updateWinStatus(self):
         b = self.board
         rows = [[b[0],b[1],b[2]],[b[3],b[4],b[5]],[b[6],b[7],b[8]]]
-        columns = [[b[0],b[3],b[6]],[b[1],b[4],b[7]],[b[2],b[5],b[8]]]
-        diags = [[b[0],b[4],b[8]],[b[2],b[4],b[6]]]
+        cols = [[b[0],b[3],b[6]],[b[1],b[4],b[7]],[b[2],b[5],b[8]]]
+        diag = [[b[0],b[4],b[8]],[b[2],b[4],b[6]]]
+        if [X,X,X] in rows or [X,X,X] in cols or [X,X,X] in diag:
+            self.winStatus = X
+        elif [O,O,O] in rows or [O,O,O] in cols or [O,O,O] in diag: #if there's a line of 3 O's or X's, then that mark wins the game
+            self.winStatus = O
+        elif EMPTY not in b:  #if there are no more empty spaces in the board and there's still no win status
+            self.winStatus = DRAW   #it's safe to assume that the board has been drawn
+        else:
+            self.winStatus = EMPTY
+#----------------Other methods-----------------#
+    #prints the board
+    def print(self):
+        b = self.board
         for i in range(3):
-            if rows[i].count(X) == 3:
-                self.win = X
-            elif rows[i].count(O) == 3:
-                self.win = O
-            elif columns[i].count(X) == 3:
-                self.win = X
-            elif columns[i].count(O) == 3:
-                self.win = O  
-        for i in range(2):
-            if diags[i].count(X) == 3:
-                self.win = X
-            elif diags[i].count(O) == 3:
-                self.win = O
-                
+            print("{0}|{1}|{2}".format(b[3*i],b[3*i + 1],b[3*i + 2]))
+            if i != 2:
+                print("-+-+-")
+    #checks to see if moving at position 'pos' is a legal move
+    def checkLegal(self, pos):
+        self.updateWinStatus()  #probably shouldn't put this here... oh well
+        if pos in range(9): #if the position 'pos' is between 0-8
+            if self.board[pos] == EMPTY:    #if there is an open space at that position
+                if self.winStatus == EMPTY:     #if the game hasn't been won yet
+                    return True                     #we are good to go
+        return False    #else, it's not a legal move
+
     def reset(self):
-        for i in range(len(self.board)):
-            self.board[i] = EMPTY
-        self.win = EMPTY
+        self.board = [EMPTY]*9
+        self.winStatus = EMPTY
