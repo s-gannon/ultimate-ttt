@@ -6,15 +6,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random as rand
 from consts import X, O, EMPTY, DRAW
-#----------------Functions--------------#
-def generateLegalMoveList(utttObj, lastSubpos):
-    legal = []
-    for p in range(9):
-        sublegal = []
-        for sp in range(9):
-            sublegal.append(utttObj.checkLegal(lastSubpos, p, sp))
-        legal.append(sublegal)
-    return legal
 #---------------Variables---------------#
 numMoves = []       #list of the num of moves to average later
 numGames = 0            #the number of games to be played
@@ -48,7 +39,7 @@ for t in range(int(input("Enter the number of simulations to run: "))):
             game.updateWinStatus()
         while game.getWinStatus() == EMPTY:
             winningMoveFlag = False
-            legalMoves = generateLegalMoveList(game, lastSubboard)  #generates all legal moves at the top of each move
+            legalMoves = game.generateLegalMoveList(lastSubboard)  #generates all legal moves at the top of each move
             ###'Check for winning move' code below
             game.updateWinStatus()
             for p in range(9):  #for every subboard

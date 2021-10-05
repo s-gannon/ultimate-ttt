@@ -1,6 +1,7 @@
 import ttt
 from consts import X, O, EMPTY, DRAW
 class uttt():
+#------------------Constructor-----------------#
     def __init__(self):
         self.board = []
         self.winStatus = EMPTY
@@ -10,9 +11,11 @@ class uttt():
     #gets the win status of the game
     def getWinStatus(self):
         return self.winStatus
+    
     #gets the mark at position 'pos','subpos'
     def getMarkAtPos(self, pos, subpos):
         return self.getSubboard(pos).getMarkAtPos(subpos)
+    
     #gets the smaller board (the ttt object) at the position 'pos' on the board
     def getSubboard(self, pos):
         return self.board[pos]
@@ -83,3 +86,12 @@ class uttt():
         self.winStatus = EMPTY
         for i in range(9):
             self.getSubboard(i).reset()
+
+    def generateLegalMoveList(subpos):
+        legal = []
+        for p in range(9):
+            sublegal = []
+            for sp in range(9):
+                sublegal.append(self.checkLegal(subpos, p, sp))
+            legal.append(sublegal)
+        return legal
