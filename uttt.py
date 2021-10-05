@@ -87,7 +87,7 @@ class uttt():
         for i in range(9):
             self.getSubboard(i).reset()
 
-    def generateLegalMoveList(subpos):
+    def generateLegalMoveList(self, subpos):
         legal = []
         for p in range(9):
             sublegal = []
