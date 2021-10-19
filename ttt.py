@@ -6,7 +6,7 @@ class ttt():
 #---------------Accessor methods---------------#
     #gets the win status of the game
     def getWinStatus(self):
-        self.updateWinStatus()  #again, probably shouldn't put this here
+        self.updateWinStatus()
         return self.winStatus
     #gets the mark at position 'pos'
     def getMarkAtPos(self, pos):
@@ -23,7 +23,7 @@ class ttt():
         diag = [[b[0],b[4],b[8]],[b[2],b[4],b[6]]]
         if [X,X,X] in rows or [X,X,X] in cols or [X,X,X] in diag:
             self.winStatus = X
-        elif [O,O,O] in rows or [O,O,O] in cols or [O,O,O] in diag: #if there's a line of 3 O's or X's, then that mark wins the game
+        elif [O,O,O] in rows or [O,O,O] in cols or [O,O,O] in diag:
             self.winStatus = O
         elif EMPTY not in b:  #if there are no more empty spaces in the board and there's still no win status
             self.winStatus = DRAW   #it's safe to assume that the board has been drawn
